@@ -11,7 +11,7 @@ from torch.utils.data import DataLoader, random_split
 from nnet.data_gen import CoverTypeDataset
 from plots.plot_utils import plot_accuracy_loss
 
-BATCH_SIZE = 64
+BATCH_SIZE = 300
 NUM_EPOCHS = 40
 model_name = f'CovType_NN_{BATCH_SIZE}_{NUM_EPOCHS}'
 only_train = False
