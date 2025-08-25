@@ -51,9 +51,9 @@ if __name__ == "__main__":
         for features, labels in tqdm(train_loader):
             optimizer.zero_grad() # clear gradients
 
-            output = model(features)
-            preds_values, preds_class = torch.max(output, 1)
-            loss = criterion(output, labels) 
+            outputs = model(features)
+            preds_values, preds_class = torch.max(outputs, 1)
+            loss = criterion(outputs, labels) 
 
             loss.backward()
             optimizer.step()
@@ -75,9 +75,9 @@ if __name__ == "__main__":
         total_correct = 0
         with torch.no_grad():
             for features, labels in tqdm(val_loader, desc =  "### Validation ###"):
-                output = model(features)
-                preds_values, preds_class = torch.max(output, 1)
-                loss = criterion(output, labels) 
+                outputs = model(features)
+                preds_values, preds_class = torch.max(outputs, 1)
+                loss = criterion(outputs, labels) 
 
                 running_loss += loss.item() * features.size(0)
                 total_correct += (preds_class == labels).sum().item()
@@ -110,7 +110,7 @@ if __name__ == "__main__":
         with torch.no_grad():
             for features, labels in tqdm(test_loader, desc =  "### Testing ###"):
                 outputs = model(features)
-                preds_values, preds_class = torch.max(output, 1)
+                preds_values, preds_class = torch.max(outputs, 1)
                 total_correct += (preds_class == labels).sum().item()
 
         print(f"Testing Accuracy: {total_correct / len(test_loader.dataset)}")
