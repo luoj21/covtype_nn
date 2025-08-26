@@ -9,14 +9,15 @@ from extract.extract import fetch_transform
 from nnet.model import BasicNN
 from torch.utils.data import DataLoader, random_split
 from nnet.data_gen import CoverTypeDataset
-from plots.plot_utils import plot_accuracy_loss
+from plots.plot_utils import plot_accuracy_loss, plot_confusion_matrix
 
 BATCH_SIZE = 300
-NUM_EPOCHS = 40
+NUM_EPOCHS = 25
 model_name = f'CovType_NN_{BATCH_SIZE}_{NUM_EPOCHS}'
 only_train = False
 train_losses, val_losses = [], []
 train_accs, val_accs= [], []
+y_preds, y_test = [], []
 epochs = []
 
 if __name__ == "__main__":
@@ -77,7 +78,7 @@ if __name__ == "__main__":
             for features, labels in tqdm(val_loader, desc =  "### Validation ###"):
                 outputs = model(features)
                 preds_values, preds_class = torch.max(outputs, 1)
-                loss = criterion(outputs, labels) 
+                loss = criterion(outputs, labels)
 
                 running_loss += loss.item() * features.size(0)
                 total_correct += (preds_class == labels).sum().item()
@@ -113,4 +114,9 @@ if __name__ == "__main__":
                 preds_values, preds_class = torch.max(outputs, 1)
                 total_correct += (preds_class == labels).sum().item()
 
+                y_preds.extend(preds_class.tolist())
+                y_test.extend(labels.tolist())
+
         print(f"Testing Accuracy: {total_correct / len(test_loader.dataset)}")
+
+        plot_confusion_matrix(y_pred = y_preds, y_test = y_test, output_path=f'{os.getcwd()}/plots/{model_name}_CM.png')
