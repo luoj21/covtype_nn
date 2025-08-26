@@ -5,6 +5,7 @@ from sklearn.metrics import confusion_matrix, accuracy_score
 
 def plot_accuracy_loss(epochs, training_loss, val_loss, training_acc, val_acc, output_path: str):
     """Plots accuracy and loss plots for model training/validation"""
+    plt.clf()
 
     fig, axs = plt.subplots(2,1, figsize = [10,10])
 
@@ -23,6 +24,7 @@ def plot_accuracy_loss(epochs, training_loss, val_loss, training_acc, val_acc, o
 
 def plot_confusion_matrix(y_pred, y_test, output_path: str):
     """Plots confusion matrix and saves to file"""
+    plt.clf()
     cm = confusion_matrix(y_test, y_pred)
     sns.heatmap(cm, annot = True)
     plt.title(f'Confusion Matrix with accuracy {accuracy_score(y_test, y_pred)}')
